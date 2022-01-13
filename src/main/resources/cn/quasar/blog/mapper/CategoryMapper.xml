@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.quasar.blog.mapper.CategoryMapper">
+    <select id="queryCategories" resultType="cn.quasar.blog.domain.Category">
+        select
+            id,
+            name as category_name
+        from category;
+    </select>
+
+    <select id="selectCategoryByName" parameterType="string" resultType="cn.quasar.blog.domain.Category">
+        select
+            id,
+            name as category_name
+        from category where name = #{categoryName};
+    </select>
+
+    <select id="selectCategoryById" parameterType="int" resultType="cn.quasar.blog.domain.Category">
+        select
+            id,
+            name as category_name
+        from category where id = #{id};
+    </select>
+
+    <insert id="addCategory" parameterType="cn.quasar.blog.domain.Category">
+        insert into category (name) values(#{categoryName});
+    </insert>
+
+    <update id="updateCategoryById">
+        update category set
+        <if test="category.categoryName != null and category.categoryName != ''">
+            name = #{category.categoryName},
+        </if>
+        <if test="category.id != 0">
+            id = #{newId}
+        </if>
+        <if test="category.id == 0">
+            id = #{id}
+        </if>
+        where id = #{id};
+    </update>
+
+    <update id="updateCategoryByName">
+        update category set
+        <if test="category.id != 0">
+            id = #{category.id},
+        </if>
+        <if test="category.categoryName != null and category.categoryName != ''">
+            name = #{category.categoryName}
+        </if>
+        <if test="category.categoryName == null or category.categoryName == ''">
+            name = #{name}
+        </if>
+        <if test="name != null and name != ''">
+            where name = #{name};
+        </if>
+        <if test="name == null or name == ''">
+            where name = 'unknow';
+        </if>
+    </update>
+
+    <delete id="deleteCategoryById" parameterType="int">
+        delete from category where id = #{id};
+    </delete>
+
+    <delete id="deleteCategoryByName" parameterType="string">
+        delete from category where name = #{categoryName};
+    </delete>
+
+    <delete id="deleteAllCategory" >
+        delete from category;
+    </delete>
+</mapper>

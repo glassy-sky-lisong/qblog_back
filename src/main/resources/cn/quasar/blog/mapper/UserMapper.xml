@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.quasar.blog.mapper.UserMapper">
+    <select id="getUsers"  resultType="cn.quasar.blog.domain.User">
+        select * from user;
+    </select>
+
+    <insert id="insertUser">
+        insert into user (
+            username,
+            password,
+            birthday,
+            gender,
+            email,
+            account_non_expired,
+            account_non_locked,
+            credentials_non_expired,
+            enabled,
+            role_id
+        ) values(
+                    #{username},
+                    #{password},
+                    #{birthday},
+                    #{gender},
+                    #{email},
+                    #{accountNonExpired},
+                    #{accountNonLocked},
+                    #{credentialsNonExpired},
+                    #{enabled},
+                    #{roleId});
+    </insert>
+
+    <select id="queryUserByName" resultType="cn.quasar.blog.domain.User">
+        select
+            user.id,
+            user.username,
+            user.password,
+            user.enabled,
+            user.account_non_expired,
+            user.account_non_locked,
+            user.credentials_non_expired,
+            role.role_name as role,
+            role.role_label as roleLabel,
+            role.role_id as roleId,
+            user.avatar,
+            user.email,
+            user.birthday,
+            user.gender
+        from user, roles, role where user.username = #{username} and roles.user_id = user.id and roles.role_id = role.role_id;
+    </select>
+
+    <select id="selectUserByName" parameterType="string" resultType="cn.quasar.blog.domain.User">
+        select
+            id,
+            username,
+            password,
+            enabled,
+            account_non_expired,
+            account_non_locked,
+            credentials_non_expired
+        from user where username = #{username};
+    </select>
+
+    <delete id="deleteUser" parameterType="string">
+        delete from user where username = #{username};
+    </delete>
+
+    <update id="updateUserById" parameterType="cn.quasar.blog.domain.User">
+        update user
+        set
+        <if test="username != null and username != ''">
+            username = #{username},
+        </if>
+        <if test="password != null and password != ''">
+            password = #{password},
+        </if>
+        <if test="birthday != null">
+            birthday = #{birthday},
+        </if>
+        <if test="email != null and email != ''">
+            email = #{email},
+        </if>
+        <if test="gender != null">
+            gender = #{gender},
+        </if>
+        id = #{id}
+        where id = #{id};
+    </update>
+</mapper>

@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.quasar.blog.mapper.ArticleMapper">
+    <select id="queryArticles" resultType="cn.quasar.blog.domain.Article">
+        select
+            p.id,
+            p.name as article_name,
+            p.author_id as author_id,
+            p.content as content,
+            p.description as description,
+            p.create_time as create_time,
+            p.last_time as last_time,
+            group_concat(b.name) as category
+        from post_article as p, categories as c, category as b where p.id = c.article_id and b.id = c.category_id group by p.name order by p.name;
+    </select>
+
+    <select id="selectArticleById" parameterType="int" resultType="cn.quasar.blog.domain.Article">
+        select
+            p.id,
+            p.name as article_name,
+            p.author_id as author_id,
+            p.content as content,
+            p.description as description,
+            p.create_time as create_time,
+            p.last_time as last_time,
+            group_concat(b.name) as category
+        from post_article as p, categories as c, category as b where p.id = c.article_id and b.id = c.category_id and p.id = #{id} group by p.name order by p.name;
+    </select>
+
+    <select id="selectArticleByName" parameterType="string" resultType="cn.quasar.blog.domain.Article">
+        select
+            p.id as id,
+            p.name as article_name,
+            p.author_id as author_id,
+            p.content as content,
+            p.description as description,
+            p.create_time as create_time,
+            p.last_time as last_time,
+            group_concat(b.name) as category
+        from post_article as p, categories as c, category as b where p.id = c.article_id and b.id = c.category_id and p.name = #{articleName} group by p.name order by p.name;
+    </select>
+
+    <select id="selectArticlesByAuthor" parameterType="int" resultType="cn.quasar.blog.domain.Article">
+        select
+            p.id,
+            p.name as article_name,
+            p.author_id as author_id,
+            p.content as content,
+            p.description as description,
+            p.create_time as create_time,
+            p.last_time as last_time,
+            group_concat(b.name) as category
+        from post_article as p, categories as c, category as b where p.id = c.article_id and b.id = c.category_id and p.author_id = #{authorId} group by p.name order by p.name;
+    </select>
+
+    <select id="selectArticlesByCategory" parameterType="string" resultType="cn.quasar.blog.domain.Article">
+        select
+            p.id,
+            p.name as article_name,
+            p.author_id as author_id,
+            p.content as content,
+            p.description as description,
+            p.create_time as create_time,
+            p.last_time as last_time,
+            group_concat(b.name) as category
+        from post_article as p, categories as c, category as b where p.id = c.article_id and b.id = c.category_id and b.name = #{categoryName} group by p.name order by p.name;
+    </select>
+
+    <insert id="addArticle" parameterType="cn.quasar.blog.domain.Article">
+        insert into post_article (
+            name,
+            description,
+            content,
+            author_id,
+            create_time,
+            last_time
+        ) values (
+                     #{articleName},
+                     #{description},
+                     #{content},
+                     #{authorId},
+                     now(),
+                     now()
+                 );
+    </insert>
+
+    <select id="queryArticleByCondition" parameterType="cn.quasar.blog.domain.Article" resultType="cn.quasar.blog.domain.Article">
+        select
+        id,
+        name as article_name,
+        description,
+        content,
+        author_id,
+        create_time,
+        last_time
+        from post_article
+        where
+        id = #{id}
+        <if test="articleName != ''">
+            and name = #{articleName}
+        </if>
+        <if test="authorId != 0">
+            and author_id = #{authorId}
+        </if>
+        <if test="createTime != null">
+            and create_time = #{createTime}
+        </if>
+        <if test="last_time != null">
+            and last_time = #{lastTime}
+        </if>;
+    </select>
+
+    <select id="queryArticleById" resultType="cn.quasar.blog.domain.Article">
+        select
+            id,
+            name as article_name,
+            description,
+            content,
+            author_id,
+            create_time,
+            last_time
+        from post_article where id = #{id};
+    </select>
+
+    <select id="queryArticleByName" resultType="cn.quasar.blog.domain.Article">
+        select
+            id,
+            name as article_name,
+            description,
+            content,
+            author_id,
+            create_time,
+            last_time
+        from post_article where name = #{articleName};
+    </select>
+
+    <update id="updateArticleById">
+        update post_article set
+        <if test="article.articleName != null and article.articleName != ''">
+            name = #{article.articleName},
+        </if>
+        <if test="article.description != null and article.description != ''">
+            description = #{article.description},
+        </if>
+        <if test="article.content != null" >
+            content = #{article.content},
+        </if>
+        <if test="article.authorId != 0">
+            author_id = #{article.authorId},
+        </if>
+        <if test="article.id != 0">
+            id = #{article.id},
+        </if>
+        last_time = now()
+        where id = #{id};
+    </update>
+
+    <update id="updateArticleByArticleName">
+        update post_article set
+        <if test="article.id != 0">
+            id = #{article.id},
+        </if>
+        <if test="article.description !=null and article.description != ''">
+            description = #{article.description},
+        </if>
+        <if test="article.content != null" >
+            content = #{article.content},
+        </if>
+        <if test="article.authorId != 0">
+            author_id = #{authorId},
+        </if>
+        <if test="article.articleName != null and article.articleName != ''">
+            name = #{article.articleName},
+        </if>
+        last_time = now()
+        where
+        <if test="name != null">
+            name = #{name};
+        </if>
+        <if test="name == null">
+            name = 'unknow'.
+        </if>
+    </update>
+
+    <delete id="deleteArticleById">
+        delete from post_article where id = #{id};
+    </delete>
+
+    <delete id="deleteArticleByArticleName" >
+        delete from post_article where name = #{articleName};
+    </delete>
+
+    <delete id="deleteAllArticle">
+        delete from post_article;
+    </delete>
+</mapper>
