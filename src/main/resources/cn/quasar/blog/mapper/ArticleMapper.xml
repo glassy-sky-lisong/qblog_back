@@ -13,7 +13,7 @@
             p.create_time as create_time,
             p.last_time as last_time,
             group_concat(b.name) as category
-        from post_article as p, categories as c, category as b where p.id = c.article_id and b.id = c.category_id group by p.name order by p.name;
+        from post_article as p, categories as c, category as b where p.id = c.article_id and b.id = c.category_id group by p.name order by p.id;
     </select>
 
     <select id="selectArticleById" parameterType="int" resultType="cn.quasar.blog.domain.Article">
@@ -26,7 +26,7 @@
             p.create_time as create_time,
             p.last_time as last_time,
             group_concat(b.name) as category
-        from post_article as p, categories as c, category as b where p.id = c.article_id and b.id = c.category_id and p.id = #{id} group by p.name order by p.name;
+        from post_article as p, categories as c, category as b where p.id = c.article_id and b.id = c.category_id and p.id = #{id} group by p.name order by p.id;
     </select>
 
     <select id="selectArticleByName" parameterType="string" resultType="cn.quasar.blog.domain.Article">
@@ -39,7 +39,7 @@
             p.create_time as create_time,
             p.last_time as last_time,
             group_concat(b.name) as category
-        from post_article as p, categories as c, category as b where p.id = c.article_id and b.id = c.category_id and p.name = #{articleName} group by p.name order by p.name;
+        from post_article as p, categories as c, category as b where p.id = c.article_id and b.id = c.category_id and p.name = #{articleName} group by p.name order by p.id;
     </select>
 
     <select id="selectArticlesByAuthor" parameterType="int" resultType="cn.quasar.blog.domain.Article">
@@ -52,7 +52,7 @@
             p.create_time as create_time,
             p.last_time as last_time,
             group_concat(b.name) as category
-        from post_article as p, categories as c, category as b where p.id = c.article_id and b.id = c.category_id and p.author_id = #{authorId} group by p.name order by p.name;
+        from post_article as p, categories as c, category as b where p.id = c.article_id and b.id = c.category_id and p.author_id = #{authorId} group by p.name order by p.id;
     </select>
 
     <select id="selectArticlesByCategory" parameterType="string" resultType="cn.quasar.blog.domain.Article">
@@ -65,7 +65,7 @@
             p.create_time as create_time,
             p.last_time as last_time,
             group_concat(b.name) as category
-        from post_article as p, categories as c, category as b where p.id = c.article_id and b.id = c.category_id and b.name = #{categoryName} group by p.name order by p.name;
+        from post_article as p, categories as c, category as b where p.id = c.article_id and b.id = c.category_id and b.name = #{categoryName} group by p.name order by p.id;
     </select>
 
     <insert id="addArticle" parameterType="cn.quasar.blog.domain.Article">
