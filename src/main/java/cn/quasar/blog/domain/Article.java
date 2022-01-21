@@ -22,4 +22,5 @@ public class Article {
     private Timestamp createTime;
     private Timestamp lastTime;
     private String category;
+    private Integer articleStatus;
 }

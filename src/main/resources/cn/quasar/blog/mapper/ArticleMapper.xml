@@ -12,6 +12,7 @@
             p.description as description,
             p.create_time as create_time,
             p.last_time as last_time,
+            p.status as article_status,
             group_concat(b.name) as category
         from post_article as p, categories as c, category as b where p.id = c.article_id and b.id = c.category_id group by p.name order by p.id;
     </select>
@@ -25,6 +26,7 @@
             p.description as description,
             p.create_time as create_time,
             p.last_time as last_time,
+            p.status as article_status,
             group_concat(b.name) as category
         from post_article as p, categories as c, category as b where p.id = c.article_id and b.id = c.category_id and p.id = #{id} group by p.name order by p.id;
     </select>
@@ -38,6 +40,7 @@
             p.description as description,
             p.create_time as create_time,
             p.last_time as last_time,
+            p.status as article_status,
             group_concat(b.name) as category
         from post_article as p, categories as c, category as b where p.id = c.article_id and b.id = c.category_id and p.name = #{articleName} group by p.name order by p.id;
     </select>
@@ -51,6 +54,7 @@
             p.description as description,
             p.create_time as create_time,
             p.last_time as last_time,
+            p.status as article_status,
             group_concat(b.name) as category
         from post_article as p, categories as c, category as b where p.id = c.article_id and b.id = c.category_id and p.author_id = #{authorId} group by p.name order by p.id;
     </select>
@@ -64,6 +68,7 @@
             p.description as description,
             p.create_time as create_time,
             p.last_time as last_time,
+            p.status as article_status,
             group_concat(b.name) as category
         from post_article as p, categories as c, category as b where p.id = c.article_id and b.id = c.category_id and b.name = #{categoryName} group by p.name order by p.id;
     </select>
@@ -75,14 +80,16 @@
             content,
             author_id,
             create_time,
-            last_time
+            last_time,
+            status
         ) values (
                      #{articleName},
                      #{description},
                      #{content},
                      #{authorId},
                      now(),
-                     now()
+                     now(),
+                     #{articleStatus}
                  );
     </insert>
 
@@ -94,7 +101,8 @@
         content,
         author_id,
         create_time,
-        last_time
+        last_time,
+        status as article_status
         from post_article
         where
         id = #{id}
@@ -107,9 +115,13 @@
         <if test="createTime != null">
             and create_time = #{createTime}
         </if>
-        <if test="last_time != null">
+        <if test="lastTime != null">
             and last_time = #{lastTime}
-        </if>;
+        </if>
+        <if test="articleStatus != null">
+            and status = #{articleStatus}
+        </if>
+        ;
     </select>
 
     <select id="queryArticleById" resultType="cn.quasar.blog.domain.Article">
@@ -120,7 +132,8 @@
             content,
             author_id,
             create_time,
-            last_time
+            last_time,
+            status as article_status
         from post_article where id = #{id};
     </select>
 
@@ -153,6 +166,9 @@
         <if test="article.id != 0">
             id = #{article.id},
         </if>
+        <if test="articleStatus != null">
+            status = #{articleStatus}
+        </if>
         last_time = now()
         where id = #{id};
     </update>
@@ -173,6 +189,9 @@
         </if>
         <if test="article.articleName != null and article.articleName != ''">
             name = #{article.articleName},
+        </if>
+        <if test="articleStatus != null">
+            status = #{articleStatus}
         </if>
         last_time = now()
         where
