@@ -17,7 +17,7 @@ public class Article {
     private int id;
     private String articleName;
     private String description;
-    private byte[] content;
+    private String content;
     private int authorId;
     private Timestamp createTime;
     private Timestamp lastTime;
