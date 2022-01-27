@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import java.sql.Timestamp;
 
 /**
- * 文章类model
+ * 文章类model.
  */
 @Data
 @NoArgsConstructor
