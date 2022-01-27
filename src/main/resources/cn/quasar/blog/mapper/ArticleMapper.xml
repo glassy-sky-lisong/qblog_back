@@ -13,7 +13,8 @@
             p.create_time as create_time,
             p.last_time as last_time,
             p.status as article_status,
-            group_concat(b.name) as category
+            group_concat(b.name) as category,
+            p.author_name as author_name
         from post_article as p, categories as c, category as b where p.id = c.article_id and b.id = c.category_id group by p.name order by p.id;
     </select>
 
@@ -27,7 +28,8 @@
             p.create_time as create_time,
             p.last_time as last_time,
             p.status as article_status,
-            group_concat(b.name) as category
+            group_concat(b.name) as category,
+            p.author_name as author_name
         from post_article as p, categories as c, category as b where p.id = c.article_id and b.id = c.category_id and p.id = #{id} group by p.name order by p.id;
     </select>
 
@@ -41,7 +43,8 @@
             p.create_time as create_time,
             p.last_time as last_time,
             p.status as article_status,
-            group_concat(b.name) as category
+            group_concat(b.name) as category,
+            p.author_name as author_name
         from post_article as p, categories as c, category as b where p.id = c.article_id and b.id = c.category_id and p.name = #{articleName} group by p.name order by p.id;
     </select>
 
@@ -55,7 +58,8 @@
             p.create_time as create_time,
             p.last_time as last_time,
             p.status as article_status,
-            group_concat(b.name) as category
+            group_concat(b.name) as category,
+            p.author_name as author_name
         from post_article as p, categories as c, category as b where p.id = c.article_id and b.id = c.category_id and p.author_id = #{authorId} group by p.name order by p.id;
     </select>
 
@@ -69,7 +73,8 @@
             p.create_time as create_time,
             p.last_time as last_time,
             p.status as article_status,
-            group_concat(b.name) as category
+            group_concat(b.name) as category,
+            p.author_name as author_name
         from post_article as p, categories as c, category as b where p.id = c.article_id and b.id = c.category_id and b.name = #{categoryName} group by p.name order by p.id;
     </select>
 
@@ -81,7 +86,8 @@
             author_id,
             create_time,
             last_time,
-            status
+            status,
+            author_name
         ) values (
                      #{articleName},
                      #{description},
@@ -89,7 +95,8 @@
                      #{authorId},
                      now(),
                      now(),
-                     #{articleStatus}
+                     #{articleStatus},
+                     #{authorName}
                  );
     </insert>
 
@@ -102,7 +109,8 @@
         author_id,
         create_time,
         last_time,
-        status as article_status
+        status as article_status,
+        p.author_name as author_name
         from post_article
         where
         id = #{id}
@@ -133,7 +141,8 @@
             author_id,
             create_time,
             last_time,
-            status as article_status
+            status as article_status,
+            p.author_name as author_name
         from post_article where id = #{id};
     </select>
 
@@ -145,7 +154,8 @@
             content,
             author_id,
             create_time,
-            last_time
+            last_time,
+            p.author_name as author_name
         from post_article where name = #{articleName};
     </select>
 

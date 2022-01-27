@@ -23,4 +23,5 @@ public class Article {
     private Timestamp lastTime;
     private String category;
     private Integer articleStatus;
+    private String authorName;
 }
