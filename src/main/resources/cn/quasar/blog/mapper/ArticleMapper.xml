@@ -110,7 +110,7 @@
         create_time,
         last_time,
         status as article_status,
-        p.author_name as author_name1
+        p.author_name as author_name
         from post_article
         where
         id = #{id}
