@@ -5,13 +5,17 @@ import cn.quasar.blog.dto.MessageResult;
 import cn.quasar.blog.dto.MessageStatus;
 import cn.quasar.blog.exception.CustomException;
 import cn.quasar.blog.mapper.ArticleMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 public class ArticleService {
 
     @Autowired
@@ -58,5 +62,23 @@ public class ArticleService {
         List<Article> articles = articleMapper.selectArticlesByCategory(categoryName);
 
         return new MessageResult(HttpStatus.OK.value(), MessageStatus.SUCCESS.getStatus(), articles, "");
+    }
+
+    @Transactional
+    public MessageResult deleteArticlesByName(List<String> names) {
+        if (names.size() > 0) {
+
+            for (int i =0; i < names.size(); i++) {
+
+                int row = articleMapper.deleteArticleByArticleName(names.get(i));
+                if (row < 0) {
+                    log.info(String.valueOf(row));
+                    throw new CustomException("删除异常，正在回滚");
+                }
+            }
+
+            return new MessageResult(HttpStatus.OK.value(), MessageStatus.SUCCESS.getStatus(), "删除成功", "");
+        }
+        return new MessageResult(HttpStatus.OK.value(), MessageStatus.SUCCESS.getStatus(), "nothing", "");
     }
 }

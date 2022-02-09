@@ -217,7 +217,7 @@
         delete from post_article where id = #{id};
     </delete>
 
-    <delete id="deleteArticleByArticleName" >
+    <delete id="deleteArticleByArticleName">
         delete from post_article where name = #{articleName};
     </delete>
 
