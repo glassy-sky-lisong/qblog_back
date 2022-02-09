@@ -1,12 +1,12 @@
 package cn.quasar.blog.controller;
 
 import cn.quasar.blog.dto.MessageResult;
+import cn.quasar.blog.mapper.CategoriesMapper;
 import cn.quasar.blog.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -39,6 +39,11 @@ public class ArticleController {
     @GetMapping(value = "/category/{categoryName}")
     public MessageResult getArticleByCategoryName(@PathVariable String categoryName) {
         return articleService.selectArticleByCategoryName(categoryName);
+    }
+
+    @PostMapping(value = "/delete/s")
+    public MessageResult deleteArticlesByArticleName(@RequestBody List<String> articles) {
+        return articleService.deleteArticlesByName(articles);
     }
 
 }

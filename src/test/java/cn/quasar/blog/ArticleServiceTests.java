@@ -19,13 +19,13 @@ public class ArticleServiceTests {
     @Autowired
     private ArticleService articleService;
 
-    @Test
-    @Rollback(true)
-    void deleteArticlesByName() {
-        List<String> datas = new ArrayList<String>();
-        datas.add("Vue初体验");
-        datas.add("balabala");
-        MessageResult result = articleService.deleteArticlesByName(datas);
-        System.out.println(result);
-    }
+//    @Test
+//    @Rollback(true)
+//    void deleteArticlesByName() {
+//        List<String> datas = new ArrayList<String>();
+//        datas.add("Vue初体验");
+////        datas.add("balabala");
+//        MessageResult result = articleService.deleteArticlesByName(datas);
+//        System.out.println(result);
+//    }
 }
