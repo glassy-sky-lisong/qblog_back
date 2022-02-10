@@ -82,7 +82,7 @@ public class ArticleService {
 
                 Article name = articleMapper.selectArticleByName(names.get(i));
                 if (name == null) {
-                    throw new CustomException("文章《" + names.get(i) + "》不存在，数据正在回滚");
+                    throw new CustomException("文章《" + names.get(i) + "》不存在");
                 }
                 List<String> categories = StrUtils.splitStr(name.getCategory(), ",");
 
