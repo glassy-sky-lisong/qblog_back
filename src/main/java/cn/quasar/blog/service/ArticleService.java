@@ -1,6 +1,8 @@
 package cn.quasar.blog.service;
 
+import ch.qos.logback.core.joran.conditional.ThenOrElseActionBase;
 import cn.quasar.blog.domain.Article;
+import cn.quasar.blog.domain.Categories;
 import cn.quasar.blog.domain.Category;
 import cn.quasar.blog.dto.MessageResult;
 import cn.quasar.blog.dto.MessageStatus;
@@ -15,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.plaf.synth.SynthSpinnerUI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,5 +101,46 @@ public class ArticleService {
             return new MessageResult(HttpStatus.OK.value(), MessageStatus.SUCCESS.getStatus(), "删除成功", "");
         }
         return new MessageResult(HttpStatus.OK.value(), MessageStatus.SUCCESS.getStatus(), "nothing", "");
+    }
+
+    @Transactional
+    public MessageResult addArticle(Article article) {
+        if ("".equals(article.getCategory())) {
+            throw new CustomException("缺少参数");
+        }
+
+        List<String> categories = StrUtils.splitStr(article.getCategory(), ",");
+        System.out.println(categories);
+        int affectRow = articleMapper.addArticle(article);
+
+        if (affectRow < 0) {
+            throw  new CustomException("插入异常，需要回滚");
+        }
+
+        if (affectRow == 0) {
+            throw  new CustomException("文章已存在");
+        }
+
+        Article currentArticle = articleMapper.queryArticleByName(article.getArticleName());
+        System.out.println(affectRow);
+
+        for (int i = 0; i < categories.size(); i++) {
+            Category category = categoryMapper.selectCategoryByName(categories.get(i));
+
+            if (category == null) {
+                throw new CustomException("参数category有误,请重新核对");
+            }
+
+            Categories categoryMid = new Categories();
+            categoryMid.setArticleId(currentArticle.getId());
+            categoryMid.setCategoryId(category.getId());
+            int affectRow1 = categoriesMapper.addCategories(categoryMid);
+
+            if (affectRow1 <= 0) {
+                throw new CustomException("分类添加异常，需要回滚");
+            }
+        }
+
+        return new MessageResult(HttpStatus.OK.value(), MessageStatus.SUCCESS.getStatus(), "添加成功", "");
     }
 }

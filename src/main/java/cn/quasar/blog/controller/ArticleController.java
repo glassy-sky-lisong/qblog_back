@@ -1,5 +1,6 @@
 package cn.quasar.blog.controller;
 
+import cn.quasar.blog.domain.Article;
 import cn.quasar.blog.dto.MessageResult;
 import cn.quasar.blog.mapper.CategoriesMapper;
 import cn.quasar.blog.service.ArticleService;
@@ -44,6 +45,11 @@ public class ArticleController {
     @PostMapping(value = "/delete/s")
     public MessageResult deleteArticlesByArticleName(@RequestBody List<String> articles) {
         return articleService.deleteArticlesByName(articles);
+    }
+
+    @PostMapping(value = "/add")
+    public MessageResult addArticle(@RequestBody Article article) {
+        return articleService.addArticle(article);
     }
 
 }
