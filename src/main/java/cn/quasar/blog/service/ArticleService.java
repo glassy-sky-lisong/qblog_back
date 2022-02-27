@@ -110,9 +110,8 @@ public class ArticleService {
         }
 
         List<String> categories = StrUtils.splitStr(article.getCategory(), ",");
-        System.out.println(categories);
+        System.out.println(article);
         int affectRow = articleMapper.addArticle(article);
-
         if (affectRow < 0) {
             throw  new CustomException("插入异常，需要回滚");
         }
@@ -120,7 +119,7 @@ public class ArticleService {
         if (affectRow == 0) {
             throw  new CustomException("文章已存在");
         }
-
+        System.out.println(affectRow);
         Article currentArticle = articleMapper.queryArticleByName(article.getArticleName());
         System.out.println(affectRow);
 

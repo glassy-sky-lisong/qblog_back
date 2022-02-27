@@ -88,7 +88,7 @@
             last_time,
             status,
             author_name
-        ) values (
+        ) select
                      #{articleName},
                      #{description},
                      #{content},
@@ -97,7 +97,7 @@
                      now(),
                      #{articleStatus},
                      #{authorName}
-                 );
+          where not exists(select 1 from post_article where name = #{articleName}) ;
     </insert>
 
     <select id="queryArticleByCondition" parameterType="cn.quasar.blog.domain.Article" resultType="cn.quasar.blog.domain.Article">
@@ -156,7 +156,7 @@
             create_time,
             last_time,
             author_name
-        from post_article where name = #{articleName};
+        from post_article where name = #{articleName} limit 1;
     </select>
 
     <update id="updateArticleById">
