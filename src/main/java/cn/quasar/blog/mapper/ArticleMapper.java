@@ -35,4 +35,7 @@ public interface ArticleMapper {
     int deleteArticleByArticleName(String articleName);
 
     int deleteAllArticle();
+
+    @Deprecated
+    List<Article> demo();
 }

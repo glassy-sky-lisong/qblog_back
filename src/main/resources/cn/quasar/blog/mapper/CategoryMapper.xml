@@ -7,21 +7,21 @@
         select
             id,
             name as category_name
-        from category;
+        from category ORDER BY id;
     </select>
 
     <select id="selectCategoryByName" parameterType="string" resultType="cn.quasar.blog.domain.Category">
         select
             id,
             name as category_name
-        from category where name = #{categoryName};
+        from category where name = #{categoryName} ORDER BY id;
     </select>
 
     <select id="selectCategoryById" parameterType="int" resultType="cn.quasar.blog.domain.Category">
         select
             id,
             name as category_name
-        from category where id = #{id};
+        from category where id = #{id} ORDER BY id;
     </select>
 
     <insert id="addCategory" parameterType="cn.quasar.blog.domain.Category">

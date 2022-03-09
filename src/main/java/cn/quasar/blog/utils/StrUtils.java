@@ -1,5 +1,7 @@
 package cn.quasar.blog.utils;
 
+import cn.quasar.blog.type.utils.Empty;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,12 +14,13 @@ public class StrUtils {
             while (target.indexOf(separator) != -1 || "".equals(target)) {
                 int next = target.indexOf(separator);
                 list.add(target.substring(0, next));
-                target = target.substring(next + 1, target.length());
+                target = target.substring(next + 1);
             }
             list.add(target);
 
             return list;
         } else {
+            list.add("");
             return list;
         }
     }
@@ -36,5 +39,9 @@ public class StrUtils {
         } else {
             return "";
         }
+    }
+
+    public static boolean isEmptyCallBack(String target, Empty empty) {
+        return empty.call(target == null);
     }
 }

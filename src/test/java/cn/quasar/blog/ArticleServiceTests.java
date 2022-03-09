@@ -45,4 +45,16 @@ public class ArticleServiceTests {
 //        MessageResult result = articleService.addArticle(article);
 //        assert ((String)result.getData()).equals("添加成功");
 //    }
+
+//    @Test
+//    @Rollback(true)
+//    void updateArticleById(){
+//        Article article = new Article();
+//        article.setId(34);
+//        article.setArticleName("哈哈哈3");
+//        articleService.editArticleById(article, 34);
+//
+//        MessageResult result = articleService.selectArticleByCategoryName("哈哈哈3");
+//        assert result.getData() != null;
+//    }
 }

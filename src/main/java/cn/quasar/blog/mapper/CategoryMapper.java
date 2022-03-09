@@ -8,6 +8,8 @@ import java.util.List;
 @Mapper
 public interface CategoryMapper {
 
+    final int CATEGORY_ZERO_ID = 9999;
+
     List<Category> queryCategories();
 
     Category selectCategoryByName(String categoryName);

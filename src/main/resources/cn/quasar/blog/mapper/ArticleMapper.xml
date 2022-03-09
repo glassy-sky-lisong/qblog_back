@@ -5,7 +5,7 @@
 <mapper namespace="cn.quasar.blog.mapper.ArticleMapper">
     <select id="queryArticles" resultType="cn.quasar.blog.domain.Article">
         select
-            p.id,
+            p.id as id,
             p.name as article_name,
             p.author_id as author_id,
             p.content as content,
@@ -20,7 +20,7 @@
 
     <select id="selectArticleById" parameterType="int" resultType="cn.quasar.blog.domain.Article">
         select
-            p.id,
+            p.id as id,
             p.name as article_name,
             p.author_id as author_id,
             p.content as content,
@@ -50,7 +50,7 @@
 
     <select id="selectArticlesByAuthor" parameterType="int" resultType="cn.quasar.blog.domain.Article">
         select
-            p.id,
+            p.id as id,
             p.name as article_name,
             p.author_id as author_id,
             p.content as content,
@@ -65,7 +65,7 @@
 
     <select id="selectArticlesByCategory" parameterType="string" resultType="cn.quasar.blog.domain.Article">
         select
-            p.id,
+            p.id as id,
             p.name as article_name,
             p.author_id as author_id,
             p.content as content,
@@ -176,8 +176,8 @@
         <if test="article.id != 0">
             id = #{article.id},
         </if>
-        <if test="articleStatus != null">
-            status = #{articleStatus}
+        <if test="article.articleStatus != null">
+            status = #{article.articleStatus}
         </if>
         last_time = now()
         where id = #{id};
@@ -191,24 +191,24 @@
         <if test="article.description !=null and article.description != ''">
             description = #{article.description},
         </if>
-        <if test="article.content != null" >
+        <if test="article.content != null and article.content != ''" >
             content = #{article.content},
         </if>
         <if test="article.authorId != 0">
-            author_id = #{authorId},
+            author_id = #{article.authorId},
         </if>
         <if test="article.articleName != null and article.articleName != ''">
             name = #{article.articleName},
         </if>
-        <if test="articleStatus != null">
-            status = #{articleStatus}
+        <if test="article.articleStatus != null">
+            status = #{article.articleStatus}
         </if>
         last_time = now()
         where
-        <if test="name != null">
+        <if test="name != null and name != ''">
             name = #{name};
         </if>
-        <if test="name == null">
+        <if test="name == null and name == ''">
             name = 'unknow'.
         </if>
     </update>
@@ -224,4 +224,22 @@
     <delete id="deleteAllArticle">
         delete from post_article;
     </delete>
+
+    <select id="demo" resultType="cn.quasar.blog.domain.Article">
+        select
+           a.id as 'id',
+           a.name 'article_name',
+           a.description 'description',
+           a.content 'content',
+           a.author_id 'author_id',
+           a.create_time 'create_time',
+           a.last_time 'last_time',
+           a.status 'article_status',
+           a.author_name 'author_name',
+           GROUP_CONCAT(b.name) 'category'
+        from
+            post_article a LEFT JOIN (
+                select a.article_id, b.`name` from categories a LEFT JOIN category b on b.id = a.category_id
+            ) b on a.id = b.article_id where a.id = 34 GROUP BY a.name;
+    </select>
 </mapper>

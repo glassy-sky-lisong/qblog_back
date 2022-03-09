@@ -22,9 +22,10 @@ public interface CategoriesMapper {
 
 
     /**
-     *   指定id更新categories中间表category_id,id
+     * 指定id更新categories中间表category_id,id
+     *
      * @param categories
-     * @param newId 新id， categories.id只作为条件，不作为更新字段
+     * @param newId      新id， categories.id只作为条件，不作为更新字段
      * @return
      */
     int updateCategoriesById(Categories categories, int id);
@@ -36,4 +37,6 @@ public interface CategoriesMapper {
     int deleteCategoriesByArticleIdAndCategoryId(int articleId, int categoryId);
 
     int deleteAllCategories();
+
+    int realDeleteCategoriesZeroValueByArticleId(int articleId);
 }
