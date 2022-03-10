@@ -177,7 +177,7 @@
             id = #{article.id},
         </if>
         <if test="article.articleStatus != null">
-            status = #{article.articleStatus}
+            status = #{article.articleStatus},
         </if>
         last_time = now()
         where id = #{id};
@@ -201,7 +201,7 @@
             name = #{article.articleName},
         </if>
         <if test="article.articleStatus != null">
-            status = #{article.articleStatus}
+            status = #{article.articleStatus},
         </if>
         last_time = now()
         where
@@ -209,7 +209,7 @@
             name = #{name};
         </if>
         <if test="name == null and name == ''">
-            name = 'unknow'.
+            name = 'unknow';
         </if>
     </update>
 

@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 @SpringBootTest
@@ -38,7 +39,7 @@ public class DemoTests {
     @Autowired
     private ArticleMapper articleMapper;
 
-    @Autowired
+    @Resource
     private ArticleService articleService;
 
 //    ------------------  category   --------------------------
