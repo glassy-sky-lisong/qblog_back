@@ -54,4 +54,9 @@ public class UserController {
         return userService.updateUser(user);
     }
 
+    @PostMapping(value = "/forget")
+    public MessageResult resetUserPwd(@RequestBody User user) {
+        return userService.resetUserPwd(user);
+    }
+
 }

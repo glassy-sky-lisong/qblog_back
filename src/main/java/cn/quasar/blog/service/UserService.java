@@ -9,12 +9,15 @@ import cn.quasar.blog.exception.CustomException;
 import cn.quasar.blog.mapper.RoleMapper;
 import cn.quasar.blog.mapper.RolesMapper;
 import cn.quasar.blog.mapper.UserMapper;
+import cn.quasar.blog.utils.AssertUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 
 @Service
@@ -32,6 +35,9 @@ public class UserService {
 
     @Autowired
     private RolesMapper rolesMapper;
+
+    @Resource
+    private AssertUtils utils;
 
     public MessageResult registryService(FormUser user) {
         MessageResult result;
@@ -80,7 +86,57 @@ public class UserService {
 
     public MessageResult updateUser(User user) {
         if (user.getId() == 0) throw new CustomException("缺少必要参数user：id");
+
+        if (user.getPassword() != null && user.getPassword().equals(equals(""))) {
+//            TODO yanzheng
+
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+            user.setPassword(encoder.encode(user.getPassword()));
+        }
+
+        String msg = "";
         int i = userMapper.updateUserById(user);
-        return new MessageResult(HttpStatus.OK.value(), MessageStatus.SUCCESS.getStatus(), "更新成功", "");
+
+        if (i <= 0) {
+            msg = "更新失败";
+        }
+        if (i == 1) {
+            msg = "更新成功";
+        }
+        return new MessageResult(HttpStatus.OK.value(), MessageStatus.SUCCESS.getStatus(), msg, "");
+    }
+
+    public MessageResult resetUserPwd(User user) {
+        utils.customExceptionHandler(user.getUsername() == null || user.getUsername().equals(""), "请提供用户名")
+                .customExceptionHandler(user.getEmail() == null || user.getEmail().equals(""), "请提供email地址");
+
+        String msg = "";
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+        User newUser = new User();
+        User qUser = userMapper.queryUserByName(user.getUsername());
+
+        if (encoder.matches(qUser.getPassword(), encoder.encode("950714ls"))) {
+            new MessageResult(HttpStatus.OK.value(), MessageStatus.SUCCESS.getStatus(), "暂不需要重置", "");
+        }
+
+        utils.customExceptionHandler(qUser == null, "请提供正确的用户名")
+                .customExceptionHandler(!user.getEmail().equals(qUser.getEmail()), "邮箱不正确");
+
+        String newPwd = encoder.encode("950714ls");
+
+
+        newUser.setId(qUser.getId());
+        newUser.setPassword(newPwd);
+
+        int i = userMapper.updateUserById(newUser);
+
+        if(i <= 0) {
+            msg = "密码重置失败";
+        }else {
+            msg = "密码重置成功";
+        }
+
+        return new MessageResult(HttpStatus.OK.value(), MessageStatus.SUCCESS.getStatus(), msg, "");
     }
 }
