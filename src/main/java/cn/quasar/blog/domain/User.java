@@ -42,6 +42,7 @@ public class User implements UserDetails {
     private int roleId;
     private String avatar;
     private String roleLabel;
+    private String sign;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

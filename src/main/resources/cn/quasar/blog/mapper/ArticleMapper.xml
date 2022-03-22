@@ -14,7 +14,8 @@
             p.last_time as last_time,
             p.status as article_status,
             group_concat(b.name) as category,
-            p.author_name as author_name
+            p.author_name as author_name,
+            p.avatar as avatar
         from post_article as p, categories as c, category as b where p.id = c.article_id and b.id = c.category_id group by p.name order by p.id;
     </select>
 
@@ -29,7 +30,8 @@
             p.last_time as last_time,
             p.status as article_status,
             group_concat(b.name) as category,
-            p.author_name as author_name
+            p.author_name as author_name,
+            p.avatar as avatar
         from post_article as p, categories as c, category as b where p.id = c.article_id and b.id = c.category_id and p.id = #{id} group by p.name order by p.id;
     </select>
 
@@ -44,7 +46,8 @@
             p.last_time as last_time,
             p.status as article_status,
             group_concat(b.name) as category,
-            p.author_name as author_name
+            p.author_name as author_name,
+            p.avatar as avatar
         from post_article as p, categories as c, category as b where p.id = c.article_id and b.id = c.category_id and p.name = #{articleName} group by p.name order by p.id;
     </select>
 
@@ -59,7 +62,8 @@
             p.last_time as last_time,
             p.status as article_status,
             group_concat(b.name) as category,
-            p.author_name as author_name
+            p.author_name as author_name,
+            p.avatar as avatar
         from post_article as p, categories as c, category as b where p.id = c.article_id and b.id = c.category_id and p.author_id = #{authorId} group by p.name order by p.id;
     </select>
 
@@ -74,7 +78,8 @@
             p.last_time as last_time,
             p.status as article_status,
             group_concat(b.name) as category,
-            p.author_name as author_name
+            p.author_name as author_name,
+            p.avatar as avatar
         from post_article as p, categories as c, category as b where p.id = c.article_id and b.id = c.category_id and b.name = #{categoryName} group by p.name order by p.id;
     </select>
 
@@ -142,7 +147,8 @@
             create_time,
             last_time,
             status as article_status,
-            p.author_name as author_name
+            p.author_name as author_name,
+            p.avatar as avatar
         from post_article where id = #{id};
     </select>
 
@@ -155,7 +161,8 @@
             author_id,
             create_time,
             last_time,
-            author_name
+            author_name,
+            avatar
         from post_article where name = #{articleName} limit 1;
     </select>
 

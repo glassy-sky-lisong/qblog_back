@@ -24,4 +24,5 @@ public class Article {
     private String category;
     private Integer articleStatus;
     private String authorName;
+    private String avatar;
 }

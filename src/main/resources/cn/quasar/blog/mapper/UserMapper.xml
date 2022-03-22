@@ -47,7 +47,8 @@
             user.avatar,
             user.email,
             user.birthday,
-            user.gender
+            user.gender,
+            user.sign
         from user, roles, role where user.username = #{username} and roles.user_id = user.id and roles.role_id = role.role_id;
     </select>
 
@@ -84,6 +85,9 @@
         </if>
         <if test="gender != null">
             gender = #{gender},
+        </if>
+        <if test="sign != null and sign != ''">
+            sign = #{sign},
         </if>
         id = #{id}
         where id = #{id};
